@@ -1,0 +1,21 @@
+server:
+  port: 6666
+  servlet:
+    context-path: /redission-lock
+
+spring:
+  redis:
+    cluster:
+      nodes: 127.0.0.1:7777,127.0.01:7778,127.0.0.1:7779,127.0.0.1:7780,127.0.0.1:7781,127.0.0.1:7782
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/springdb?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: pxy736499
+
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+    # log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath*:mapper/*Mapper.xml

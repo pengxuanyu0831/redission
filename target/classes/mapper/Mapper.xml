@@ -1,0 +1,15 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.peng.mapper.TyjUserMapper">
+    <!-- Sans 2019/6/9 14:35 -->
+    <resultMap id="BaseResultMap" type="com.peng.model.TyjUser">
+        <id column="user_id" jdbcType="VARCHAR" property="userId" />
+        <result column="income" jdbcType="DECIMAL" property="income"/>
+    </resultMap>
+    <select id="selectIncoome" resultType="com.peng.model.TyjUser" resultMap="BaseResultMap">
+        select * from tyj_user where user_id = 1
+    </select>
+    <update id="updateIncome">
+        update tyj_user set income = income - 1
+        where user_id = #{userId,jdbcType=VARCHAR}
+    </update>
+</mapper>
