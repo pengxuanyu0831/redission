@@ -5,8 +5,13 @@ server:
 
 spring:
   redis:
-    cluster:
-      nodes: 127.0.0.1:7777,127.0.01:7778,127.0.0.1:7779,127.0.0.1:7780,127.0.0.1:7781,127.0.0.1:7782
+    redission:
+      config:
+        singleServerConfig:
+          idleConnectionTimeout: 10000
+          address: redis://localhost:6379
+    #cluster:
+      #nodes: 127.0.0.1:7777,127.0.01:7778,127.0.0.1:7779,127.0.0.1:7780,127.0.0.1:7781,127.0.0.1:7782
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/springdb?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true

@@ -18,7 +18,7 @@ import java.io.IOException;
  * @create: 2021/05/30 11:16
  */
 @Slf4j
-@Configuration
+// @Configuration
 @EnableTransactionManagement
 public class RedissionConfig {
     @Value("${spring.redis.cluster.nodes}")
