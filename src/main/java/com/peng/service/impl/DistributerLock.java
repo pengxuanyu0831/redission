@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
  * @author: pengxuanyu
  * @create: 2021/05/30 11:27
  */
-@Component
+/*@Component*/
 public class DistributerLock implements IDistributerLock {
     @Autowired
     private RedissonClient redissonClient;

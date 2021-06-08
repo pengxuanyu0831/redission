@@ -3,6 +3,7 @@ package com.peng.utils;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RBucket;
 import org.redisson.api.RedissonClient;
+import org.redisson.client.codec.StringCodec;
 import org.redisson.config.Config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +17,7 @@ import org.springframework.stereotype.Service;
  */
 @Slf4j
 @Service
-public class RedissionOperateUtil {
+public class RedissionOperateUtil<T> {
     private static RedissionOperateUtil redissionOperateUtil;
 
     private RedissionOperateUtil() {}
@@ -31,9 +32,15 @@ public class RedissionOperateUtil {
      * @return
      */
     public <T> RBucket<T> getBucket(String key) {
-        RBucket<T> bucket = redissonClient.getBucket(key);
+        RBucket<T> bucket = redissonClient.getBucket(key,StringCodec.INSTANCE);
         return bucket;
     }
+
+    public void setBucket(String key, T value) {
+        RBucket<T> bucket = redissonClient.getBucket(key, StringCodec.INSTANCE);
+        bucket.set(value);
+    }
+
 
 
 
