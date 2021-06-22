@@ -1,10 +1,7 @@
 package com.peng.utils;
 
 import lombok.extern.slf4j.Slf4j;
-import org.redisson.api.RBucket;
-import org.redisson.api.RList;
-import org.redisson.api.RMap;
-import org.redisson.api.RedissonClient;
+import org.redisson.api.*;
 import org.redisson.client.codec.StringCodec;
 import org.redisson.config.Config;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +43,7 @@ public class RedissionOperateUtil<T> {
     }
 
     /**
-     * 获取map对象
+     * 获取map对象，就是redis里的hash，还可以实现缓存的功能
      * @param key
      * @param <K>
      * @param <V>
@@ -64,8 +61,7 @@ public class RedissionOperateUtil<T> {
      * @return
      */
     public <V> RList<V> getList(String key) {
-        RList<V> list = redissonClient.getList(key);
-        return list;
+        return redissonClient.getList(key);
     }
 
     /**
@@ -76,8 +72,7 @@ public class RedissionOperateUtil<T> {
      * @return
      */
     public <V> RList<V> range(String key,int end) {
-        RList<V> list = (RList<V>) redissonClient.getList(key).range(end);
-        return list;
+        return (RList<V>) redissonClient.getList(key).range(end);
     }
 
     /**
@@ -89,8 +84,7 @@ public class RedissionOperateUtil<T> {
      * @return
      */
     public <V> RList<V> range(String key, int start, int end) {
-        RList<V> list = (RList<V>) redissonClient.getList(key).range(start, end);
-        return list;
+        return (RList<V>) redissonClient.getList(key).range(start, end) ;
     }
 
     /**
@@ -111,6 +105,17 @@ public class RedissionOperateUtil<T> {
      */
     public int size(String key) {
         return redissonClient.getList(key).size();
+    }
+
+
+    /**
+     * 获取set
+     * @param key
+     * @param <V>
+     * @return
+     */
+    public <V> RSet<V> getSet(String key) {
+        return redissonClient.getSet(key);
     }
 
 
