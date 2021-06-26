@@ -7,6 +7,7 @@ import com.peng.service.impl.DistributerLock;
 import com.peng.utils.RedissionOperateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RBucket;
+import org.redisson.api.RList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -85,4 +87,27 @@ public class TyjUserController {
         RBucket str = redissionOperateUtil.getBucket(key);
         return str.get();
     }
+
+    @GetMapping("/getlist")
+    public <V> RList<V> getlist(String key) {
+        redissionOperateUtil.lpushmutli(key, 10);
+        return redissionOperateUtil.getList(key);
+    }
+
+    @GetMapping("/poplist")
+    public boolean poplist(String key) {
+        return redissionOperateUtil.lpop(key);
+    }
+
+    @GetMapping("/getlist1")
+    public List<Object> getlist1(String key) {
+        return redissionOperateUtil.getList1(key);
+    }
+
+    @GetMapping("/getlist2")
+    public boolean getlist2(String key,String value) {
+        return redissionOperateUtil.setnx(key,value);
+    }
+
+
 }

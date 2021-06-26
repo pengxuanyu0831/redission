@@ -1,12 +1,20 @@
 package com.peng.utils;
 
+import com.peng.config.RedissionConfig;
 import lombok.extern.slf4j.Slf4j;
+import org.redisson.Redisson;
 import org.redisson.api.*;
 import org.redisson.client.codec.StringCodec;
 import org.redisson.config.Config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.PostConstruct;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @program redission
@@ -18,9 +26,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 public class RedissionOperateUtil<T> {
-    private static RedissionOperateUtil redissionOperateUtil;
 
-    private RedissionOperateUtil() {}
 
     @Qualifier("getRedission")
     @Autowired
@@ -40,6 +46,14 @@ public class RedissionOperateUtil<T> {
     public void setBucket(String key, T value) {
         RBucket<T> bucket = redissonClient.getBucket(key, StringCodec.INSTANCE);
         bucket.set(value);
+    }
+
+    public boolean setnx(String key, Object value) {
+        return redissonClient.getBucket(key).trySet(value,60,TimeUnit.SECONDS);
+    }
+
+    public boolean setnxandexpire(String key, int seconds) {
+        return redissonClient.getBucket(key).expire(seconds, TimeUnit.SECONDS);
     }
 
     /**
@@ -63,6 +77,39 @@ public class RedissionOperateUtil<T> {
     public <V> RList<V> getList(String key) {
         return redissonClient.getList(key);
     }
+
+    public List<Object> getList1(String key) {
+        return redissonClient.getList(key).readAll();
+    }
+
+    /**
+     * 添加给list添加元素
+     * @param key
+     * @param value
+     */
+    public void lpush(String key,Object value) {
+        redissonClient.getList(key).add(value);
+    }
+
+    /**
+     * 红包个数增减
+     * @param key
+     * @param count
+     */
+    public void lpushmutli(String key, int count) {
+        List<String> list1 = new ArrayList<>();
+        if (count > 0) {
+            for (int i = 0; i < count; i++) {
+                list1.add("1");
+            }
+            redissonClient.getList(key).addAll(list1);
+        }
+    }
+
+    public boolean lpop(String key) {
+        return redissonClient.getList(key).remove("1");
+    }
+
 
     /**
      * 获取从index=0 到index=end
