@@ -48,6 +48,12 @@ public class RedissionOperateUtil<T> {
         bucket.set(value);
     }
 
+    /**
+     * 时间是key的存在时间
+     * @param key
+     * @param value
+     * @return
+     */
     public boolean setnx(String key, Object value) {
         return redissonClient.getBucket(key).trySet(value,60,TimeUnit.SECONDS);
     }
@@ -165,6 +171,41 @@ public class RedissionOperateUtil<T> {
         return redissonClient.getSet(key);
     }
 
+    /**
+     * 至多30s等待获取锁时间，默认10s可以传参设置
+     * hash类型的K-V value 是线程号，如果不释放，redission 的watch-dog机制会一直续时，故而使用tryLock上锁尽量手动释放锁
+     * trylock()可以设定持有时间和等待时间
+     * lock()只能设定持有时间
+     * @param key
+     * @return
+     * @throws InterruptedException
+     */
+    public Boolean locks(String key,int sec,TimeUnit timeUnit) throws InterruptedException {
+        return redissonClient.getLock(key).tryLock(sec,timeUnit);
+    }
+
+    /**
+     * 默认15s等待时间
+     * @param key
+     * @return
+     * @throws InterruptedException
+     */
+    public Boolean locks(String key) throws InterruptedException {
+        return redissonClient.getLock(key).tryLock(15,TimeUnit.SECONDS);
+    }
+
+    public void unlocks(String key) {
+        redissonClient.getLock(key).unlock();
+    }
+
+    /**
+     * 公平锁&非公平锁
+     * 这里的时间是持有锁的时间
+     * @param key
+     */
+    public void fairlock(String key) throws InterruptedException {
+        redissonClient.getFairLock(key).tryLock(10,TimeUnit.SECONDS);
+    }
 
 
 

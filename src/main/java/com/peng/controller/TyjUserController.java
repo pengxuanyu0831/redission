@@ -109,5 +109,15 @@ public class TyjUserController {
         return redissionOperateUtil.setnx(key,value);
     }
 
+    @GetMapping("/getlock")
+    public boolean getlock(String key) throws InterruptedException {
+        return redissionOperateUtil.locks("redislock");
+    }
+
+    @GetMapping("/unlock")
+    public void getlocks(String key) {
+        redissionOperateUtil.unlocks(key);
+    }
+
 
 }
