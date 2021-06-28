@@ -42,6 +42,20 @@ public class RedissionOperateUtil<T> {
         RBucket<T> bucket = redissonClient.getBucket(key,StringCodec.INSTANCE);
         return bucket;
     }
+    /**
+     * 设定一个数字，原子性的增减
+     */
+    public void setAtomicMuli(String key, long count) {
+        redissonClient.getAtomicLong(key).set(count);
+    }
+
+    public Long decrAtomic(String key) {
+        return redissonClient.getAtomicLong(key).decrementAndGet();
+    }
+
+    public Long incrAtomic(String key) {
+        return redissonClient.getAtomicLong(key).incrementAndGet();
+    }
 
     public void setBucket(String key, T value) {
         RBucket<T> bucket = redissonClient.getBucket(key, StringCodec.INSTANCE);
@@ -80,11 +94,11 @@ public class RedissionOperateUtil<T> {
      * @param <V>
      * @return
      */
-    public <V> RList<V> getList(String key) {
+    public <V> RList<V> getRList(String key) {
         return redissonClient.getList(key);
     }
 
-    public List<Object> getList1(String key) {
+    public List<Object> getList(String key) {
         return redissonClient.getList(key).readAll();
     }
 
@@ -182,6 +196,7 @@ public class RedissionOperateUtil<T> {
      */
     public Boolean locks(String key,int sec,TimeUnit timeUnit) throws InterruptedException {
         return redissonClient.getLock(key).tryLock(sec,timeUnit);
+       //  redissonClient.getLock(key).lock(10,TimeUnit.SECONDS);
     }
 
     /**

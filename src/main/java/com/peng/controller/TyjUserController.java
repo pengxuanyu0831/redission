@@ -88,21 +88,21 @@ public class TyjUserController {
         return str.get();
     }
 
-    @GetMapping("/getlist")
+/*    @GetMapping("/getlist")
     public <V> RList<V> getlist(String key) {
         redissionOperateUtil.lpushmutli(key, 10);
-        return redissionOperateUtil.getList(key);
-    }
+        return redissionOperateUtil.getList(key);*/
+/*    }*/
 
     @GetMapping("/poplist")
     public boolean poplist(String key) {
         return redissionOperateUtil.lpop(key);
     }
 
-    @GetMapping("/getlist1")
+/*    @GetMapping("/getlist1")
     public List<Object> getlist1(String key) {
-        return redissionOperateUtil.getList1(key);
-    }
+        return redissionOperateUtil.getLists(key);
+    }*/
 
     @GetMapping("/getlist2")
     public boolean getlist2(String key,String value) {
@@ -117,6 +117,21 @@ public class TyjUserController {
     @GetMapping("/unlock")
     public void getlocks(String key) {
         redissionOperateUtil.unlocks(key);
+    }
+
+    @GetMapping("/setnumber")
+    public void setnumber(String key, long number) {
+        redissionOperateUtil.setAtomicMuli(key, number);
+    }
+
+    @GetMapping("/add")
+    public long add(String key) {
+        return redissionOperateUtil.incrAtomic(key);
+    }
+
+    @GetMapping("/sub")
+    public long sub(String key) {
+        return redissionOperateUtil.decrAtomic(key);
     }
 
 
